@@ -7,7 +7,6 @@ using System.Numerics;
 // - Texturer
 // - Färger
 // - Input
-
 // - Olika scener
 // - Kollisioner
 
@@ -70,13 +69,24 @@ while (!Raylib.WindowShouldClose())
 
     if (movement.Length() > 0)
     {
-      movement = Vector2.Normalize(movement);
+      movement = Vector2.Normalize(movement) * speed;
     }
-
-    movement *= speed;
 
     characterRect.x += movement.X;
     characterRect.y += movement.Y;
+
+    // x = 2
+    // move.x = -3
+    // 2 + -3
+    // -1
+
+    // -1 - -3
+
+    if (characterRect.x < 0 || characterRect.x > 800 - 64)
+    {
+      characterRect.x -= movement.X;
+    }
+
 
     if (Raylib.CheckCollisionRecs(characterRect, doorRect))
     {
