@@ -1,6 +1,54 @@
 ﻿using Raylib_cs;
 using System.Numerics;
 
+string enemyName;
+
+List<string> names = new() { "Micke", "Martin", "Lena" };
+names.Add("Christian");
+names.Insert(1, "Herbert");
+
+foreach (string name in names)
+{
+  Console.WriteLine(name);
+}
+
+
+// for (int j = 0; j < names.Count; j++)
+// {
+//   Console.WriteLine(names[j]);
+// }
+
+// int i = 0;
+// while (i < names.Count)
+// {
+//   Console.WriteLine(names[i]);
+//   i++;
+// }
+
+
+// int i = Random.Shared.Next(names.Count);
+// Console.WriteLine(names[i]);
+
+Console.ReadLine();
+
+
+// int i = generator.Next(3);
+// if (i == 0)
+// {
+//   enemyName = "Micke";
+// }
+// else if (i == 1)
+// {
+//   enemyName = "Martin";
+// }
+// else if (i == 2)
+// {
+//   enemyName = "Lena";
+// }
+
+
+
+
 // - Vektorer för förflyttning
 // - Vektorer för positioner (cirklar)
 // - Rektanglar
@@ -23,6 +71,8 @@ Texture2D characterImage = Raylib.LoadTexture("imse.png");
 Rectangle characterRect = new Rectangle(10, 10, 32, 32);
 characterRect.width = characterImage.width;
 characterRect.height = characterImage.height;
+
+Rectangle wall1 = new Rectangle(64, 0, 16, 200);
 
 Rectangle doorRect = new Rectangle(760, 460, 32, 32);
 
@@ -85,6 +135,10 @@ while (!Raylib.WindowShouldClose())
     if (characterRect.x < 0 || characterRect.x > 800 - 64)
     {
       characterRect.x -= movement.X;
+    }
+    if (characterRect.y < 0 || characterRect.y > 600 - 64)
+    {
+      characterRect.y -= movement.Y;
     }
 
 
