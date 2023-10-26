@@ -1,17 +1,16 @@
 ﻿using Raylib_cs;
 using System.Numerics;
 
-string enemyName;
+// string enemyName;
 
-List<string> names = new() { "Micke", "Martin", "Lena" };
-names.Add("Christian");
-names.Insert(1, "Herbert");
+// List<string> names = new() { "Micke", "Martin", "Lena" };
+// names.Add("Christian");
+// names.Insert(1, "Herbert");
 
-foreach (string name in names)
-{
-  Console.WriteLine(name);
-}
-
+// foreach (string name in names)
+// {
+//   Console.WriteLine(name);
+// }
 
 // for (int j = 0; j < names.Count; j++)
 // {
@@ -29,7 +28,7 @@ foreach (string name in names)
 // int i = Random.Shared.Next(names.Count);
 // Console.WriteLine(names[i]);
 
-Console.ReadLine();
+// Console.ReadLine();
 
 
 // int i = generator.Next(3);
@@ -68,11 +67,28 @@ Color hotPink = new Color(255, 105, 180, 255);
 
 
 Texture2D characterImage = Raylib.LoadTexture("imse.png");
-Rectangle characterRect = new Rectangle(10, 10, 32, 32);
+Rectangle characterRect = new Rectangle(100, 100, 32, 32);
 characterRect.width = characterImage.width;
 characterRect.height = characterImage.height;
 
-Rectangle wall1 = new Rectangle(64, 0, 16, 200);
+List<Rectangle> walls = new();
+
+// for (int x = 0; x < 800; x += 32)
+// {
+//   for (int y = 0; y < 600; y += 32)
+//   {
+//     if (x % 64 == 0)
+//     {
+
+//       walls.Add(new Rectangle(x, y, 16, 16));
+//     }
+//   }
+// }
+
+walls.Add(new Rectangle(32, 32, 32, 128));
+walls.Add(new Rectangle(64, 32, 128, 32));
+walls.Add(new Rectangle(192, 32, 32, 128));
+walls.Add(new Rectangle(256, 32, 32, 128));
 
 Rectangle doorRect = new Rectangle(760, 460, 32, 32);
 
@@ -123,42 +139,37 @@ while (!Raylib.WindowShouldClose())
     }
 
     characterRect.x += movement.X;
-    characterRect.y += movement.Y;
 
-    // x = 2
-    // move.x = -3
-    // 2 + -3
-    // -1
+    bool isInAWall = CheckIfWall(characterRect, walls);
 
-    // -1 - -3
-
-    if (characterRect.x < 0 || characterRect.x > 800 - 64)
+    if (isInAWall == true)
     {
       characterRect.x -= movement.X;
     }
-    if (characterRect.y < 0 || characterRect.y > 600 - 64)
+
+    characterRect.y += movement.Y;
+    
+    isInAWall = CheckIfWall(characterRect, walls);
+    if (isInAWall == true)
     {
       characterRect.y -= movement.Y;
     }
 
+    // if (characterRect.x < 0 || characterRect.x > 800 - 64)
+    // {
+    //   characterRect.x -= movement.X;
+    // }
+    // if (characterRect.y < 0 || characterRect.y > 600 - 64)
+    // {
+    //   characterRect.y -= movement.Y;
+    // }
 
     if (Raylib.CheckCollisionRecs(characterRect, doorRect))
     {
       points++;
     }
 
-    // x++;
-    // floorY += floorSpeedY;
-    // if (floorY < 0)
-    // {
-    //   floorSpeedY = 1;
-    // }
-    // else if (floorY > 550)
-    // {
-    //   floorSpeedY = -1;
-    // }
 
-    // position += movement;
   }
 
   // --------------------------------------------------------------------------
@@ -182,9 +193,26 @@ while (!Raylib.WindowShouldClose())
 
     Raylib.DrawRectangleRec(doorRect, Color.BROWN);
 
+    foreach (Rectangle wall in walls)
+    {
+      Raylib.DrawRectangleRec(wall, Color.BLACK);
+    }
+
     Raylib.DrawText($"Points: {points}", 10, 10, 32, Color.WHITE);
 
   }
 
   Raylib.EndDrawing();
+}
+
+static bool CheckIfWall(Rectangle characterRect, List<Rectangle> walls)
+{
+  foreach (Rectangle wall in walls)
+  {
+    if (Raylib.CheckCollisionRecs(characterRect, wall))
+    {
+      return true;
+    }
+  }
+  return false;
 }
